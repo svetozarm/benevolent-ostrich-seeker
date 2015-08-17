@@ -1,0 +1,3 @@
+malloc     -1  0   -1
+xalloc     -1  0   -1
+calloc     0  1   -1
