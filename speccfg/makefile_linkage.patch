@@ -1,0 +1,11 @@
+--- Makefile.defaults	2015-08-20 02:04:43.124269992 +0000
++++ Makefile.defaults.new	2015-08-20 01:44:27.680932654 +0000
+@@ -29,7 +29,7 @@
+ # first target.  Stop." error message.  Thanks a lot, GNU make.
+ BENCH_FLAGS=
+ CPUFLAGS=
+-EXTRA_LDFLAGS=
++EXTRA_LDFLAGS=-linstrumentation -L$(INST_LIB)
+ EXTRA_LIBS=
+ LD=
+ LDOPT=

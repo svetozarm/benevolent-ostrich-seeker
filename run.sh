@@ -41,7 +41,7 @@ do
 
     export ALLOC_IN=$BENCH_CONFIG
     runspec --action=scrub $BENCH_NAME
-    LD_LIBRARY_PATH=$INST_LIB runspec --config=llvmemtrack --size=ref --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    LD_LIBRARY_PATH=$INST_LIB runspec --config=llvmemtrack --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
     cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/run/run*0000/access.trace $RESULT_DIR/$BENCH_NAME.trace
     cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/run/run*0000/trace.bin $RESULT_DIR
     cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/build/build*0000/map*.json $RESULT_DIR
