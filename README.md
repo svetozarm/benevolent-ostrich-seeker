@@ -7,5 +7,7 @@ Set your SPEC_INSTALL env variable.
 
 Apply patches for either tidy or llvm tracking by doing:
 
-`cd ./speccfg
-./apply_patches.sh <tidy|llvmtrack>`
+```
+cd ./speccfg
+./apply_patches.sh <tidy|llvmtrack>
+```
