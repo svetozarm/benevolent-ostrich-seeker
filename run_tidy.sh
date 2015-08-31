@@ -4,10 +4,10 @@
 : ${INST_LIB:?"Need to set INST_LIB to point to the directory where your libinstrumentation.so and instrumentation.bc are stored"}
 
 CONFDIR=`readlink -f ./alloc-configs`
+CURRENT=`pwd`
 
 if [ -z "$1" ]
 then
-  CURRENT=`pwd`
   cd $CONFDIR
   BENCHLIST=`ls | xargs readlink -f`
   cd $CURRENT
@@ -41,8 +41,59 @@ do
 
     export ALLOC_IN=$BENCH_CONFIG
     runspec --action=scrub $BENCH_NAME
-    LD_LIBRARY_PATH=$TIDY_ROOT/lib runspec --config=tidy_alloc --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    LD_LIBRARY_PATH=$TIDY_ROOT/lib runspec --config=tidy_alloc --size=train --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    TIMING=`cat $RESULT_DIR/output.log | grep "format: ASCII" | awk '{print $4}'`
+    cp $TIMING $RESULT_DIR/all_timing.txt
+    cat $TIMING | grep $BENCH_NAME | grep "VE" | grep -v "\#" > $RESULT_DIR/timing.txt
+    pwd
+    rm $CURRENT/results/latest -rf
+    mkdir $CURRENT/results/latest
+    cp $RESULT_DIR/* $CURRENT/results/latest -R
 done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
