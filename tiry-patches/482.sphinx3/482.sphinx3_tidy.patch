@@ -1,0 +1,135 @@
+Binary files 482.sphinx3/exe/sphinx_livepretend_base.amd64-m64-gcc41-nn and 482.sphinx3_tidy/exe/sphinx_livepretend_base.amd64-m64-gcc41-nn differ
+Binary files 482.sphinx3/src/.mdef.c.swp and 482.sphinx3_tidy/src/.mdef.c.swp differ
+Binary files 482.sphinx3/src/.mdef.h.swp and 482.sphinx3_tidy/src/.mdef.h.swp differ
+Binary files 482.sphinx3/src/.spec_main_live_pretend.c.swp and 482.sphinx3_tidy/src/.spec_main_live_pretend.c.swp differ
+diff -rupN 482.sphinx3/src/mdef.c 482.sphinx3_tidy/src/mdef.c
+--- 482.sphinx3/src/mdef.c	2015-08-30 22:22:56.245013776 +0000
++++ 482.sphinx3_tidy/src/mdef.c	2015-08-31 22:30:10.268633207 +0000
+@@ -79,6 +79,7 @@
+ 
+ 
+ #include "mdef.h"
++#include "tidy-alloc.h"
+ 
+ 
+ #define MODEL_DEF_VERSION	"0.3"
+@@ -190,8 +191,9 @@ static void triphone_add (mdef_t *m,
+ 	    mdef_phone_str (m, rcptr->pid, buf);
+ 	    E_FATAL("Duplicate triphone: %s\n", buf);
+ 	}
+-	
+-      rcptr = (ph_rc_t *) ckd_calloc (1, sizeof(ph_rc_t)); /* freed in mdef_free, I believe */
++    tidy_context_t *ctx = get_global_context();
++    //rcptr = (ph_rc_t *) ckd_calloc (1, sizeof(ph_rc_t)); /* freed in mdef_free, I believe */
++    rcptr = (ph_rc_t *) tidy_alloc (ctx, sizeof(ph_rc_t), 0, ((p/1000) % 1000)); /* freed in mdef_free, I believe */
+ 	rcptr->rc = rc;
+ 	rcptr->pid = p;
+ 	rcptr->next = lcptr->rclist;
+@@ -835,45 +837,45 @@ void mdef_free (mdef_t *m)
+ {
+   int i,j;
+ 
+-  if (m) { 
+-    if (m->ciphone2n_cd_sen)
+-      ckd_free    ((void *)m->ciphone2n_cd_sen);
+-    if (m->sen2cimap)
+-      ckd_free    ((void *)m->sen2cimap);
+-    if (m->cd2cisen)
+-      ckd_free    ((void *)m->cd2cisen);
+-
+-    /* RAH, go down the ->next list and delete all the pieces */
+-    for (i=0;i<N_WORD_POSN;i++)
+-      for (j=0;j<m->n_ciphone;j++) 
+-	if (m->wpos_ci_lclist[i][j]) {
+-	  mdef_free_recursive_lc (m->wpos_ci_lclist[i][j]->next);
+-	  mdef_free_recursive_rc (m->wpos_ci_lclist[i][j]->rclist);
+-	}
+-    
+-    for (i=0;i<N_WORD_POSN;i++)
+-      for (j=0;j<m->n_ciphone;j++) 
+-	if (m->wpos_ci_lclist[i][j])  
+-	  ckd_free ((void *) m->wpos_ci_lclist[i][j]);
+-
+-    
+-    if (m->wpos_ci_lclist)
+-      ckd_free_2d ((void *)m->wpos_ci_lclist);
+-    if (m->sseq) 
+-      ckd_free_2d ((void *)m->sseq);
+-    /* Free phone context */
+-    if (m->phone) 
+-      ckd_free    ((void *)m->phone);    
+-    if (m->ciphone_ht)
+-      hash_free (m->ciphone_ht);
+-
+-    for (i=0;i<m->n_ciphone;i++) {
+-      if (m->ciphone[i].name) 
+-	ckd_free    ((void *)m->ciphone[i].name);
+-    }
+-    if (m->ciphone) 
+-      ckd_free    ((void *)m->ciphone);
++  /*if (m) { */
++    /*if (m->ciphone2n_cd_sen)*/
++      /*ckd_free    ((void *)m->ciphone2n_cd_sen);*/
++    /*if (m->sen2cimap)*/
++      /*ckd_free    ((void *)m->sen2cimap);*/
++    /*if (m->cd2cisen)*/
++      /*ckd_free    ((void *)m->cd2cisen);*/
++
++    /*[> RAH, go down the ->next list and delete all the pieces <]*/
++    /*for (i=0;i<N_WORD_POSN;i++)*/
++      /*for (j=0;j<m->n_ciphone;j++) */
++	/*if (m->wpos_ci_lclist[i][j]) {*/
++	  /*mdef_free_recursive_lc (m->wpos_ci_lclist[i][j]->next);*/
++	  /*mdef_free_recursive_rc (m->wpos_ci_lclist[i][j]->rclist);*/
++	/*}*/
++    
++    /*for (i=0;i<N_WORD_POSN;i++)*/
++      /*for (j=0;j<m->n_ciphone;j++) */
++	/*if (m->wpos_ci_lclist[i][j])  */
++	  /*ckd_free ((void *) m->wpos_ci_lclist[i][j]);*/
++
++    
++    /*if (m->wpos_ci_lclist)*/
++      /*ckd_free_2d ((void *)m->wpos_ci_lclist);*/
++    /*if (m->sseq) */
++      /*ckd_free_2d ((void *)m->sseq);*/
++    /*[> Free phone context <]*/
++    /*if (m->phone) */
++      /*ckd_free    ((void *)m->phone);    */
++    /*if (m->ciphone_ht)*/
++      /*hash_free (m->ciphone_ht);*/
++
++    /*for (i=0;i<m->n_ciphone;i++) {*/
++      /*if (m->ciphone[i].name) */
++	/*ckd_free    ((void *)m->ciphone[i].name);*/
++    /*}*/
++    /*if (m->ciphone) */
++      /*ckd_free    ((void *)m->ciphone);*/
+     
+-    ckd_free    ((void *)m);
+-  }
++    /*ckd_free    ((void *)m);*/
++  /*}*/
+ }
+diff -rupN 482.sphinx3/src/spec_main_live_pretend.c 482.sphinx3_tidy/src/spec_main_live_pretend.c
+--- 482.sphinx3/src/spec_main_live_pretend.c	2015-08-30 22:22:56.245013776 +0000
++++ 482.sphinx3_tidy/src/spec_main_live_pretend.c	2015-08-31 22:30:10.268633207 +0000
+@@ -67,6 +67,7 @@
+ #include "live.h"
+ #include "cmd_ln_args.h"
+ #include "kb.h"
++#include "tidy-alloc.h"
+ extern kb_t *kb;  // so that we can tweak them from here
+ 
+ // These four kinds of beams are discussed in 
+@@ -98,6 +99,10 @@ int main (int argc, char *argv[])
+     int ib,nbeams;
+     FILE *beamsfp;
+ 
++    tidy_context_t *tidy_ctx = get_global_context();
++    tidy_init(tidy_ctx, MALLOC_FALLTHROUGH);
++    /*tidy_init(tidy_ctx, BUCKET_2D, 5, 1000, 4096);//MALLOC_FALLTHROUGH);*/
++
+     // Read beams.dat: the sets of beams to be applied to all utterances
+ 
+     if ((beamsfp = fopen("beams.dat", "r")) == NULL) {
