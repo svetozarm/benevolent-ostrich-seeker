@@ -1,14 +1,16 @@
 --- Makefile.defaults	2015-08-31 00:53:11.895043480 +0000
-+++ Makefile.defaults.tidy	2015-08-31 00:52:50.508376744 +0000
-@@ -29,7 +29,7 @@
++++ Makefile.defaults.tidy	2015-08-31 01:55:14.491722412 +0000
+@@ -29,8 +29,8 @@
  # first target.  Stop." error message.  Thanks a lot, GNU make.
  BENCH_FLAGS=
  CPUFLAGS=
 -EXTRA_LDFLAGS=
-+EXTRA_LDFLAGS=-ltidyalloc -L$(TIDY_ROOT)/lib
- EXTRA_LIBS=
+-EXTRA_LIBS=
++EXTRA_LDFLAGS=-L$(TIDY_ROOT)/lib
++EXTRA_LIBS=-ltidyalloc
  LD=
  LDOPT=
+ LDPORTABILITY=
 @@ -43,7 +43,7 @@
  PORTABILITY_LIBS=
  MATH_LIBS=
