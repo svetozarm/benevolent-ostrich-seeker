@@ -1,2 +1,2 @@
-hash_new     -1  0   -1
-makekey     -1  1   -1
+__ckd_malloc__     -1  0   -1
+__ckd_calloc__     0  1   -1
