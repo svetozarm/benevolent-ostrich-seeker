@@ -23,10 +23,10 @@ else
   echo "Running $BENCHLIST"
 fi
 
-mkdir ./results/
-RESULT_BASE=`readlink -f ./results/`
+mkdir ./braid_results/
+RESULT_BASE=`readlink -f ./braid_results/`
 
-cp speccfg/llvmemtrack.cfg $SPEC_INSTALL/config
+cp speccfg/braidstructprofile.cfg $SPEC_INSTALL/config
 
 cd $SPEC_INSTALL
 source ./shrc
@@ -39,10 +39,7 @@ do
     RESULT_DIR=$RESULT_BASE/${BENCH_NAME}_`date +%y%m%d_%H%M%S`
     mkdir -p $RESULT_DIR
 
-    export ALLOC_IN=$BENCH_CONFIG
+    export BRAID_STRUCTINFO=$RESULT_BASE/${BENCH_NAME}_structinfo.json
     runspec --action=scrub $BENCH_NAME
-    LD_LIBRARY_PATH=$INST_LIB runspec --config=llvmemtrack --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
-    cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/run/run*0000/access.trace $RESULT_DIR/$BENCH_NAME.trace
-    cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/run/run*0000/trace.bin* $RESULT_DIR
-    cp $SPEC_INSTALL/benchspec/CPU2006/$BENCH_NAME/build/build*0000/map*.json $RESULT_DIR
+    LD_LIBRARY_PATH=$INST_LIB runspec --config=braidstructprofile --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
 done

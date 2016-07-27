@@ -1,0 +1,9 @@
+{
+    "function_filters" : {
+            "*" : {
+            "events" : [
+                "alloc"
+                ]
+            }
+    }
+}
