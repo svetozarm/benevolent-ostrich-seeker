@@ -23,13 +23,14 @@ do
     echo $BENCH_CONFIG
     echo $BENCH_NAME
     echo "CANDIDATE STRUCT "${STRUCT}
-    RESULT_DIR=$RESULT_BASE/${BENCH_NAME}_`date +%y%m%d_%H%M%S`
+    RESULT_DIR=$RESULT_BASE/${BENCH_NAME}_${STRUCT}_`date +%y%m%d_%H%M%S`
     mkdir -p $RESULT_DIR
 
     export BRAID_STRUCT=${STRUCT}
     export ALLOC_IN=$BENCH_CONFIG
     runspec --action=scrub $BENCH_NAME
-    LD_LIBRARY_PATH=$INST_LIB/../../llvm-access-instrumentation/StructInterleave/braidalloc/ runspec --config=braid --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    LD_LIBRARY_PATH=$BRAID_LIB runspec --config=braid --size=ref --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    cat $RESULT_DIR/output.log | grep "The log for this run is in" | awk '{print $8}' | xargs cat | grep "Workload elapsed" > $RESULT_DIR/time.txt
 
 done < $infile
 
@@ -47,5 +48,5 @@ do
     export BRAID_STRUCTINFO=$RESULT_BASE/${BENCH_NAME}_structinfo.json
     export ALLOC_IN=$BENCH_CONFIG
     runspec --action=scrub $BENCH_NAME
-    LD_LIBRARY_PATH=$INST_LIB/../../llvm-access-instrumentation/StructInterleave/braidalloc/ runspec --config=braid --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
+    LD_LIBRARY_PATH=$BRAID_LIB runspec --config=braid --size=test --noreportable $BENCH_NAME | tee $RESULT_DIR/output.log
 done
